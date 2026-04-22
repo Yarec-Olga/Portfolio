@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ольга — AI-First Разработчик</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Geist+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+    :root {
+      --bg:     #0a0f1e;
+      --bg2:    #0d1428;
+      --ink:    #f0eee8;
+      --warm:   #ffffff;
+      --stone:  #8892aa;
+      --gold:   #c4922a;
+      --gold-l: #e8c97a;
+      --rule:   rgba(255,255,255,0.08);
+    }
+
+    html { scroll-behavior:smooth; }
+
+    body {
+      background:var(--bg);
+      color:var(--ink);
+      font-family:'Geist Mono', monospace;
+      font-weight:300;
+      overflow-x:hidden;
+    }
+
+    /* ── GRAIN ── */
+    body::after {
+      content:''; position:fixed; inset:0; z-index:999; pointer-events:none;
+      opacity:.032;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+    }
+
+    /* ── NAV ── */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:grid; grid-template-columns:1fr auto 1fr;
+      align-items:center;
+      padding:24px 56px;
+      background:rgba(8,14,32,0.92);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--rule);
+    }
+    .nav-left {
+      font-size:10px; letter-spacing:.25em; text-transform:uppercase;
+      color:rgba(160,175,210,0.75);
+    }
+    .nav-center {
+      font-family:'Cormorant',serif;
+      font-size:18px; font-style:italic; color:var(--gold);
+      letter-spacing:.06em;
+    }
+    .nav-right {
+      display:flex; gap:32px; justify-content:flex-end; list-style:none;
+    }
+    .nav-right a {
+      font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+      color:rgba(160,175,210,0.75); text-decoration:none; transition:color .2s;
+    }
+    .nav-right a:hover { color:#ffffff; }
+
+    .hero {
+      min-height:100vh;
+      display:grid;
+      grid-template-rows:1fr auto;
+      padding:0 56px;
+      padding-top:100px;
+      border-bottom:1px solid var(--rule);
+      position:relative;
+      overflow:hidden;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% 40%, rgba(37,56,140,0.55) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(20,35,90,0.35) 0%, transparent 55%),
+        radial-gradient(ellipse 30% 30% at 80% 20%, rgba(196,146,42,0.06) 0%, transparent 50%);
+    }
+
+    /* large background letter */
+    .hero-bg-letter {
+      position:absolute;
+      font-family:'Cormorant',serif;
+      font-size:clamp(320px,38vw,560px);
+      font-weight:600; font-style:italic;
+      color:rgba(255,255,255,0.025);
+      line-height:1;
+      right:-2vw; top:50%; transform:translateY(-52%);
+      pointer-events:none; user-select:none;
+      letter-spacing:-.04em;
+    }
+
+    .hero-content {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      justify-content:center;
+      padding-bottom:80px;
+      padding-top:40px;
+      max-width:800px;
+      margin:0 auto;
+      width:100%;
+    }
+
+    .hero-left { width:100%; }
+
+    .hero-eyebrow {
+      display:flex; align-items:center; justify-content:center; gap:16px;
+      font-size:10px; letter-spacing:.28em; text-transform:uppercase;
+      color:rgba(160,175,210,0.8); margin-bottom:48px;
+      opacity:0; animation:fadeIn .6s forwards .1s;
+    }
+    .hero-eyebrow::before { content:''; width:32px; height:1px; background:var(--gold); }
+    .hero-eyebrow::after  { content:''; width:32px; height:1px; background:var(--gold); }
+
+    .hero-name {
+      font-family:'Cormorant',serif;
+      font-size:clamp(72px,10vw,140px);
+      font-weight:300; line-height:.92;
+      letter-spacing:-.03em;
+      margin-bottom:0;
+      opacity:0; animation:fadeIn .9s forwards .2s;
+    }
+    .hero-name em {
+      font-style:italic; font-weight:600;
+      color:var(--gold); display:block;
+    }
+
+    .hero-right {
+      display:flex; flex-direction:column;
+      align-items:center;
+      padding-top:48px;
+      border-left:none;
+      border-top:1px solid var(--rule);
+      margin-top:48px;
+      width:100%;
+    }
+
+    .hero-name {
+      font-family:'Cormorant',serif;
+      font-size:clamp(72px,10vw,140px);
+      font-weight:300; line-height:.92;
+      letter-spacing:-.03em;
+      margin-bottom:0;
+      opacity:0; animation:fadeIn .9s forwards .2s;
+    }
+    .hero-name em {
+      font-style:italic; font-weight:600;
+      color:var(--gold); display:block;
+    }
+
+    .hero-right {
+      display:flex; flex-direction:column;
+      align-items:center;
+      padding-bottom:8px;
+      margin-top:40px;
+    }
+
+    .hero-role {
+      font-family:'Cormorant',serif;
+      font-size:clamp(20px,2.4vw,30px); font-style:italic;
+      color:rgba(160,175,210,0.75); font-weight:300;
+      margin-bottom:32px;
+      opacity:0; animation:fadeIn .7s forwards .45s;
+    }
+
+    .hero-desc {
+      font-size:13px; line-height:1.85;
+      color:rgba(160,175,210,0.7); max-width:480px;
+      margin-bottom:48px;
+      opacity:0; animation:fadeIn .7s forwards .6s;
+    }
+
+    .hero-btns {
+      display:flex; gap:12px; flex-wrap:wrap;
+      opacity:0; animation:fadeIn .7s forwards .75s;
+    }
+    .btn {
+      font-family:'Geist Mono',monospace;
+      font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+      padding:13px 24px; text-decoration:none;
+      transition:all .22s; display:inline-block;
+      cursor:pointer; border:none; font-weight:400;
+    }
+    .btn-dark { background:var(--ink); color:var(--bg); }
+    .btn-dark:hover { background:var(--warm); }
+    .btn-line { background:transparent; border:1px solid var(--rule); color:var(--ink); }
+    .btn-line:hover { border-color:var(--ink); }
+
+    /* hero footer bar */
+    .hero-bar {
+      display:grid; grid-template-columns:repeat(4,1fr);
+      border-top:1px solid rgba(255,255,255,0.08);
+      opacity:0; animation:fadeIn .6s forwards .9s;
+    }
+    .hero-stat {
+      padding:28px 32px; border-right:1px solid rgba(255,255,255,0.08);
+    }
+    .hero-stat:last-child { border-right:none; }
+    .hero-stat-num {
+      font-family:'Cormorant',serif;
+      font-size:38px; font-weight:600; color:#d4a84b;
+      line-height:1; margin-bottom:6px;
+    }
+    .hero-stat-label { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:rgba(160,175,210,0.65); }
+
+    /* ── SECTION LAYOUT ── */
+    .section { padding:120px 56px; border-bottom:1px solid var(--rule); }
+    .section-header {
+      display:grid; grid-template-columns:auto 1fr;
+      align-items:baseline; gap:32px;
+      margin-bottom:80px;
+      padding-bottom:24px;
+      border-bottom:1px solid var(--rule);
+    }
+    .section-num {
+      font-family:'Cormorant',serif;
+      font-size:13px; color:var(--gold); letter-spacing:.1em;
+    }
+    .section-title {
+      font-family:'Cormorant',serif;
+      font-size:clamp(36px,4vw,52px); font-weight:300;
+      line-height:1.05; letter-spacing:-.02em;
+    }
+    .section-title em { font-style:italic; }
+
+    /* ── ABOUT ── */
+    .about-body {
+      display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start;
+    }
+    .about-p {
+      font-size:15px; line-height:1.9; color:var(--stone);
+    }
+    .about-p + .about-p { margin-top:20px; }
+    .about-p strong { color:var(--ink); font-weight:400; }
+
+    .about-details { display:flex; flex-direction:column; gap:0; }
+    .detail-row {
+      display:grid; grid-template-columns:140px 1fr;
+      padding:18px 0; border-bottom:1px solid var(--rule); gap:24px;
+      font-size:13px;
+    }
+    .detail-row:first-child { border-top:1px solid var(--rule); }
+    .detail-key { color:var(--stone); letter-spacing:.08em; text-transform:uppercase; font-size:10px; padding-top:2px; }
+    .detail-val { color:var(--ink); line-height:1.6; }
+
+    /* ── SKILLS ── */
+    .skills-body { display:grid; grid-template-columns:1fr 1fr; gap:80px; }
+
+    .skill-group-label {
+      font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+      color:var(--gold); margin-bottom:32px;
+    }
+    .skill-list { display:flex; flex-direction:column; }
+    .skill-row {
+      display:grid; grid-template-columns:1fr auto;
+      padding:16px 0; border-bottom:1px solid var(--rule);
+      align-items:baseline; gap:20px;
+    }
+    .skill-row:first-child { border-top:1px solid var(--rule); }
+    .skill-name { font-size:14px; color:var(--ink); }
+    .skill-detail { font-size:11px; color:var(--stone); text-align:right; max-width:180px; line-height:1.4; }
+
+    .learning-list { display:flex; flex-direction:column; }
+    .learning-row {
+      display:flex; align-items:baseline; gap:16px;
+      padding:16px 0; border-bottom:1px solid var(--rule);
+      font-size:14px;
+    }
+    .learning-row:first-child { border-top:1px solid var(--rule); }
+    .learning-arrow { color:var(--gold); font-size:12px; flex-shrink:0; }
+    .learning-name { color:var(--ink); }
+    .learning-sub { font-size:11px; color:var(--stone); margin-top:2px; }
+
+    /* ── PROJECTS ── */
+    .projects-list { display:flex; flex-direction:column; gap:0; }
+
+    .project-row {
+      display:grid; grid-template-columns:80px 1fr auto;
+      align-items:start; gap:40px;
+      padding:48px 0; border-bottom:1px solid var(--rule);
+      transition:background .2s;
+    }
+    .project-row:first-child { border-top:1px solid var(--rule); }
+    .project-row:hover { background:rgba(196,146,42,.03); }
+
+    .proj-num {
+      font-family:'Cormorant',serif;
+      font-size:42px; font-weight:300; color:rgba(196,146,42,.3);
+      line-height:1; padding-top:4px;
+    }
+
+    .proj-body {}
+    .proj-title {
+      font-family:'Cormorant',serif;
+      font-size:28px; font-weight:400; margin-bottom:12px;
+      letter-spacing:-.01em;
+    }
+    .proj-desc { font-size:13px; color:var(--stone); line-height:1.8; margin-bottom:20px; max-width:520px; }
+    .proj-tags { display:flex; flex-wrap:wrap; gap:8px; }
+    .proj-tag {
+      font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+      padding:4px 10px; border:1px solid var(--rule); color:var(--stone);
+    }
+
+    .proj-links {
+      display:flex; flex-direction:column; gap:12px; align-items:flex-end;
+      padding-top:6px; min-width:100px;
+    }
+    .proj-link {
+      font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+      color:var(--stone); text-decoration:none;
+      display:flex; align-items:center; gap:6px;
+      transition:color .2s; white-space:nowrap;
+    }
+    .proj-link:hover { color:var(--gold); }
+    .proj-link svg { width:12px; height:12px; stroke:currentColor; }
+
+    .project-soon {
+      padding:48px 0; border-bottom:1px solid var(--rule);
+      display:flex; align-items:center; gap:24px;
+      color:var(--stone); font-size:13px; letter-spacing:.06em;
+    }
+    .soon-dash { width:48px; height:1px; background:var(--rule); flex-shrink:0; }
+
+    /* ── CONTACT ── */
+    .contact-body {
+      display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start;
+    }
+    .contact-statement {
+      font-family:'Cormorant',serif;
+      font-size:clamp(28px,3vw,42px); font-weight:300;
+      line-height:1.2; letter-spacing:-.02em; color:var(--ink);
+    }
+    .contact-statement em { font-style:italic; color:var(--gold); }
+
+    .contact-list { display:flex; flex-direction:column; }
+    .contact-row {
+      display:grid; grid-template-columns:100px 1fr;
+      padding:18px 0; border-bottom:1px solid var(--rule); gap:24px;
+    }
+    .contact-row:first-child { border-top:1px solid var(--rule); }
+    .contact-key { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--stone); padding-top:2px; }
+    .contact-val a {
+      font-size:14px; color:var(--ink); text-decoration:none; transition:color .2s;
+    }
+    .contact-val a:hover { color:var(--gold); }
+    .contact-val span { font-size:14px; color:var(--ink); }
+
+    .contact-cta { margin-top:40px; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding:32px 56px;
+      display:grid; grid-template-columns:1fr auto 1fr;
+      align-items:center;
+      border-top:1px solid var(--rule);
+    }
+    .foot-left { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--stone); }
+    .foot-center { font-family:'Cormorant',serif; font-style:italic; font-size:18px; color:var(--gold); text-align:center; }
+    .foot-right { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--stone); text-align:right; }
+
+    /* ── REVEAL ── */
+    .reveal { opacity:0; transform:translateY(20px); transition:opacity .8s ease, transform .8s ease; }
+    .reveal.on { opacity:1; transform:none; }
+
+    @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:860px) {
+      nav { padding:18px 24px; grid-template-columns:1fr 1fr; }
+      .nav-center { display:none; }
+      .nav-right { display:none; }
+      .hero, .section { padding-left:24px; padding-right:24px; }
+      .hero-content { grid-template-columns:1fr; }
+      .hero-right { border-left:none; border-top:1px solid var(--rule); padding-left:0; padding-top:40px; margin-top:40px; }
+      .hero-bar { grid-template-columns:1fr 1fr; }
+      .hero-stat:nth-child(2) { border-right:none; }
+      .about-body, .skills-body, .contact-body { grid-template-columns:1fr; gap:48px; }
+      .project-row { grid-template-columns:1fr; gap:16px; }
+      .proj-num { font-size:28px; }
+      .proj-links { flex-direction:row; align-items:center; }
+      footer { grid-template-columns:1fr 1fr; }
+      .foot-center { display:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-left">AI-First Developer</div>
+    <div class="nav-center">Olga</div>
+    <ul class="nav-right">
+      <li><a href="#about">Обо мне</a></li>
+      <li><a href="#skills">Навыки</a></li>
+      <li><a href="#projects">Проекты</a></li>
+      <li><a href="#contact">Контакт</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-letter">O</div>
+
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="hero-eyebrow">Warsaw, Poland · Available for remote</div>
+        <h1 class="hero-name">
+          Ольга<br>
+          <em>AI-First Developer</em>
+        </h1>
+      </div>
+
+      <div class="hero-right">
+        <p class="hero-role">AI-First Developer</p>
+        <p class="hero-desc">
+          Создаю веб-решения через сотрудничество с AI.<br>
+          Полный цикл разработки — от идеи до собственного домена.
+        </p>
+        <div class="hero-btns">
+          <a href="#projects" class="btn btn-dark">View Projects</a>
+          <a href="#contact" class="btn btn-line">Get in Touch</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-bar">
+      <div class="hero-stat">
+        <div class="hero-stat-num">34</div>
+        <div class="hero-stat-label">Lessons completed</div>
+      </div>
+      <div class="hero-stat" style="padding-left:32px;">
+        <div class="hero-stat-num">2</div>
+        <div class="hero-stat-label">Python projects</div>
+      </div>
+      <div class="hero-stat" style="padding-left:32px;">
+        <div class="hero-stat-num">1</div>
+        <div class="hero-stat-label">Live website</div>
+      </div>
+      <div class="hero-stat" style="padding-left:32px;">
+        <div class="hero-stat-num">.com</div>
+        <div class="hero-stat-label">Own domain</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section">
+    <div class="section-header reveal">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Обо <em>мне</em></h2>
+    </div>
+    <div class="about-body">
+      <div>
+        <p class="about-p reveal">
+          Я разработчик в процессе становления — прошла <strong>34 из 49 уроков</strong> AI-First разработки и уже создаю реальные, работающие проекты.
+        </p>
+        <p class="about-p reveal">
+          Умею работать с <strong>HTML, CSS, Python, GitHub, Vercel</strong> и Claude AI. Прошла полный цикл деплоя — от локального кода до собственного домена <strong>olga-dev.com</strong>.
+        </p>
+        <p class="about-p reveal">
+          Моя цель — <strong>удалённая работа разработчиком</strong>. Двигаюсь к ней осознанно: шаг за шагом, проект за проектом.
+        </p>
+      </div>
+      <div class="about-details reveal">
+        <div class="detail-row">
+          <div class="detail-key">Статус</div>
+          <div class="detail-val">Открыта к удалённой работе</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-key">Город</div>
+          <div class="detail-val">Варшава, Польша</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-key">Направление</div>
+          <div class="detail-val">AI-First Development</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-key">Курс</div>
+          <div class="detail-val">ARIA School — 34 / 49 уроков</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-key">Домен</div>
+          <div class="detail-val">olga-dev.com</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="section">
+    <div class="section-header reveal">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Навыки и <em>инструменты</em></h2>
+    </div>
+    <div class="skills-body">
+      <div class="reveal">
+        <p class="skill-group-label">Текущие навыки</p>
+        <div class="skill-list">
+          <div class="skill-row">
+            <span class="skill-name">HTML5 & CSS3</span>
+            <span class="skill-detail">Задеплоила живой проект на Vercel</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-name">Python</span>
+            <span class="skill-detail">2 консольные игры написаны с нуля</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-name">Claude AI</span>
+            <span class="skill-detail">Ежедневный инструмент разработки</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-name">GitHub</span>
+            <span class="skill-detail">Контроль версий и репозитории</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-name">Vercel</span>
+            <span class="skill-detail">Автодеплой из GitHub</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-name">DNS & Domain</span>
+            <span class="skill-detail">Купила и настроила olga-dev.com</span>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <p class="skill-group-label">Сейчас изучаю</p>
+        <div class="learning-list">
+          <div class="learning-row">
+            <span class="learning-arrow">→</span>
+            <div>
+              <div class="learning-name">Разработка портфолио</div>
+              <div class="learning-sub">Создаю профессиональный сайт-портфолио</div>
+            </div>
+          </div>
+          <div class="learning-row">
+            <span class="learning-arrow">→</span>
+            <div>
+              <div class="learning-name">Принципы веб-дизайна</div>
+              <div class="learning-sub">Визуальный дизайн и типографика</div>
+            </div>
+          </div>
+          <div class="learning-row">
+            <span class="learning-arrow">→</span>
+            <div>
+              <div class="learning-name">Python — продвинутый уровень</div>
+              <div class="learning-sub">Углубляю знания языка</div>
+            </div>
+          </div>
+          <div class="learning-row">
+            <span class="learning-arrow">→</span>
+            <div>
+              <div class="learning-name">React</div>
+              <div class="learning-sub">Следующий шаг во фронтенде</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="section">
+    <div class="section-header reveal">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Мои <em>проекты</em></h2>
+    </div>
+    <div class="projects-list">
+
+      <div class="project-row reveal">
+        <div class="proj-num">01</div>
+        <div class="proj-body">
+          <h3 class="proj-title">Personal Introduction Website</h3>
+          <p class="proj-desc">
+            Личный сайт-визитка — первый полноценный веб-проект, созданный с нуля и опубликованный на собственном домене. Реализован через AI-First методологию с полным циклом деплоя.
+          </p>
+          <div class="proj-tags">
+            <span class="proj-tag">HTML5</span>
+            <span class="proj-tag">CSS3</span>
+            <span class="proj-tag">Claude AI</span>
+            <span class="proj-tag">GitHub</span>
+            <span class="proj-tag">Vercel</span>
+          </div>
+        </div>
+        <div class="proj-links">
+          <a href="https://olga-dev.com" target="_blank" class="proj-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Live Demo
+          </a>
+          <a href="https://github.com/Yarec-Olga/week1-introduction" target="_blank" class="proj-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            Source
+          </a>
+        </div>
+      </div>
+
+      <div class="project-soon reveal">
+        <div class="soon-dash"></div>
+        Новые проекты скоро появятся
+        <div class="soon-dash"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section">
+    <div class="section-header reveal">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Написать <em>мне</em></h2>
+    </div>
+    <div class="contact-body">
+      <div class="reveal">
+        <p class="contact-statement">
+          Открыта к новым<br>возможностям и<br><em>сотрудничеству</em>
+        </p>
+      </div>
+      <div>
+        <div class="contact-list reveal">
+          <div class="contact-row">
+            <div class="contact-key">Почта</div>
+            <div class="contact-val"><a href="mailto:workbook.olga@gmail.com">workbook.olga@gmail.com</a></div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-key">GitHub</div>
+            <div class="contact-val"><a href="https://github.com/Yarec-Olga" target="_blank">github.com/Yarec-Olga</a></div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-key">Город</div>
+            <div class="contact-val"><span>Варшава, Польша</span></div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-key">Статус</div>
+            <div class="contact-val"><span>Открыта к удалённой работе</span></div>
+          </div>
+        </div>
+        <div class="contact-cta reveal">
+          <a href="mailto:workbook.olga@gmail.com" class="btn btn-dark">Написать письмо</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="foot-left">© 2026</div>
+    <div class="foot-center">Ольга</div>
+    <div class="foot-right">AI-First Developer</div>
+  </footer>
+
+<script>
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('on'); });
+}, { threshold:0.08 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

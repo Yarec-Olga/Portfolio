@@ -38,7 +38,7 @@
 
     /* ── NAV ── */
     nav {
-      position:fixed; top:0; left:0; right:0; z-index:100;
+      position:fixed; top:37px; left:0; right:0; z-index:100;
       display:grid; grid-template-columns:1fr auto 1fr;
       align-items:center;
       padding:24px 56px;
@@ -69,7 +69,7 @@
       display:grid;
       grid-template-rows:1fr auto;
       padding:0 56px;
-      padding-top:100px;
+      padding-top:137px;
       border-bottom:1px solid var(--rule);
       position:relative;
       overflow:hidden;
@@ -390,6 +390,37 @@
 </head>
 <body>
 
+  <!-- BANNER -->
+  <div style="
+    position:fixed; top:0; left:0; right:0; z-index:200;
+    background:linear-gradient(90deg, rgba(196,146,42,0.12), rgba(196,146,42,0.06));
+    border-bottom:1px solid rgba(196,146,42,0.25);
+    padding:10px 56px;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    font-family:'Geist Mono',monospace;
+    font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+    color:rgba(196,146,42,0.9);
+    backdrop-filter:blur(10px);
+  ">
+    <span style="font-size:13px;">🚀</span>
+    Currently in Week 9 of 16
+    <span style="
+      display:inline-flex; gap:4px; margin-left:12px;
+    ">
+      <span id="prog-bar" style="
+        display:flex; gap:2px; align-items:center;
+      "></span>
+    </span>
+  </div>
+  <script>
+    const bar = document.getElementById('prog-bar');
+    for(let i=0;i<16;i++){
+      const d = document.createElement('span');
+      d.style.cssText = `display:inline-block;width:14px;height:3px;border-radius:2px;background:${i<9?'rgba(196,146,42,0.85)':'rgba(196,146,42,0.2)'}`;
+      bar.appendChild(d);
+    }
+  </script>
+
   <!-- NAV -->
   <nav>
     <div class="nav-left">AI-First Developer</div>
@@ -430,7 +461,7 @@
 
     <div class="hero-bar">
       <div class="hero-stat">
-        <div class="hero-stat-num">34</div>
+        <div class="hero-stat-num">41</div>
         <div class="hero-stat-label">Lessons completed</div>
       </div>
       <div class="hero-stat" style="padding-left:32px;">
@@ -457,7 +488,7 @@
     <div class="about-body">
       <div>
         <p class="about-p reveal">
-          Я разработчик в процессе становления — прошла <strong>34 из 49 уроков</strong> AI-First разработки и уже создаю реальные, работающие проекты.
+          Я разработчик в процессе становления — прошла <strong>41 из 49 уроков</strong> AI-First разработки и уже создаю реальные, работающие проекты.
         </p>
         <p class="about-p reveal">
           Умею работать с <strong>HTML, CSS, Python, GitHub, Vercel</strong> и Claude AI. Прошла полный цикл деплоя — от локального кода до собственного домена <strong>olga-dev.com</strong>.
@@ -481,7 +512,7 @@
         </div>
         <div class="detail-row">
           <div class="detail-key">Курс</div>
-          <div class="detail-val">ARIA School — 34 / 49 уроков</div>
+          <div class="detail-val">ARIA School — 41 / 49 уроков</div>
         </div>
         <div class="detail-row">
           <div class="detail-key">Домен</div>
